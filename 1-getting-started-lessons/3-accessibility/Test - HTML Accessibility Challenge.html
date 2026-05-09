@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Turtle Ipsum is the world's premier fan club for turtle lovers, with curated resources and community news.">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Turtle Ipsum - The World's Premier Turtle Fan Club</title>
+    <link href='../assets/style.css' rel='stylesheet' type='text/css'>
+    <style>
+      :focus-visible {
+        outline: 3px solid #005a9c;
+        outline-offset: 2px;
+      }
+
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        z-index: 1000;
+      }
+
+      .modal-overlay.active {
+        display: flex;
+      }
+
+      .modal {
+        background: #ABffff85;
+        max-width: 520px;
+        width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+        padding: 1.5rem;
+      }
+
+      .modal header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .modal header h2 {
+        margin: 0;
+        font-size: 1.25rem;
+      }
+
+      .modal-close {
+        background: transparent;
+        border: none;
+        color: #0b3d91;
+        font-size: 1.25rem;
+        cursor: pointer;
+      }
+
+      .modal form {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .modal label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+      }
+
+      .modal input,
+      .modal textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #9ca3af;
+        border-radius: 8px;
+        font: inherit;
+        box-sizing: border-box;
+      }
+
+      .modal input:focus,
+      .modal textarea:focus {
+        border-color: #005a9c;
+        box-shadow: 0 0 0 3px rgba(0, 90, 156, 0.18);
+      }
+
+      .field-error {
+        color: #b91c1c;
+        font-size: 0.95rem;
+        margin-top: 0.3rem;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      .modal-actions button {
+        padding: 0.85rem 1rem;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .modal-actions .primary {
+        background: #005a9c;
+        color: #ffffff;
+      }
+
+      .modal-actions .secondary {
+        background: #f3f4f6;
+        color: #111827;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <h1 class="site-title">Turtle Ipsum</h1>
+      <p class="site-subtitle">The World's Premier Turtle Fan Club</p>
+    </header>
+    
+    <!-- Main navigation uses a landmark role and ARIA label for assistive technology -->
+    <nav class="main-nav" aria-label="Main navigation">
+      <h2 class="nav-header">Resources</h2>
+      <ul class="nav-list">
+        <li><a href="https://www.youtube.com/watch?v=CMNry4PE93Y">"I like turtles" video</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Turtle">Basic turtle information</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Turtles_(chocolate)">Chocolate turtles candy</a></li>
+      </ul>
+    </nav>
+    
+    <main class="main-content">
+      <article>
+        <!-- Updated heading hierarchy: page title remains the single h1, article section now uses h2 -->
+        <!-- <h1>Welcome to Turtle Ipsum</h1> -->
+        <h2>Welcome to Turtle Ipsum</h2>
+        <p class="intro">
+          <!-- Changed to meaningful link text rather than generic phrasing -->
+          <a href="/about">Read more about our turtle community on the About page</a> and discover fascinating facts about these amazing creatures.
+        </p>
+        <p class="article-text">
+          Turtle ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </article>
+    </main>
+    
+    <!-- Footer is structured with landmarks and an interactive button element -->
+    <footer class="footer">
+      <section class="newsletter-signup">
+        <h2>Stay Updated</h2>
+        <!-- Replaced inline onclick handler with accessible modal trigger button -->
+        <!-- <button type="button" onclick="showNewsletterForm()">Sign up for turtle news</button> -->
+        <button id="open-modal-btn" type="button">Sign up for turtle news</button>
+      </section>
+
+      <!-- Accessible modal dialog component with ARIA attributes and focus management -->
+      <div class="modal-overlay" id="newsletter-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" aria-hidden="true">
+        <div class="modal" role="document">
+          <header>
+            <h2 id="modal-title">Newsletter signup</h2>
+            <button type="button" class="modal-close" aria-label="Close newsletter form" id="close-modal-btn">×</button>
+          </header>
+          <p id="modal-desc">Subscribe to our turtle news with your name, email, and a message. Required fields are clearly labeled and validated.</p>
+          <form id="newsletter-form" novalidate>
+            <div>
+              <label for="name">Name</label>
+              <input id="name" name="name" type="text" required aria-required="true" />
+              <p class="field-error" id="name-error" aria-live="polite"></p>
+            </div>
+            <div>
+              <label for="email">Email address</label>
+              <input id="email" name="email" type="email" required aria-required="true" />
+              <p class="field-error" id="email-error" aria-live="polite"></p>
+            </div>
+            <div>
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="4" required aria-required="true"></textarea>
+              <p class="field-error" id="message-error" aria-live="polite"></p>
+            </div>
+            <div class="modal-actions">
+              <button type="button" class="secondary" id="cancel-modal-btn">Cancel</button>
+              <button type="submit" class="primary">Subscribe</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <h2>Site Pages</h2>
+        <ul>
+          <li><a href="../">Home</a></li>
+          <li><a href="../semantic">Semantic HTML example</a></li>
+        </ul>
+      </nav>
+      
+      <p class="footer-copyright">&copy; 2024 Instrument. All rights reserved.</p>
+    </footer>
+    <script>
+      const openButton = document.getElementById('open-modal-btn');
+      const closeButton = document.getElementById('close-modal-btn');
+      const cancelButton = document.getElementById('cancel-modal-btn');
+      const modal = document.getElementById('newsletter-modal');
+      const form = document.getElementById('newsletter-form');
+      const firstFocusable = document.getElementById('name');
+      const focusableSelectors = 'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])';
+      let focusableElements = [];
+      let lastFocusedElement = null;
+
+      function openModal() {
+        lastFocusedElement = document.activeElement;
+        modal.classList.add('active');
+        modal.removeAttribute('aria-hidden');
+        focusableElements = Array.from(modal.querySelectorAll(focusableSelectors));
+        firstFocusable.focus();
+        document.addEventListener('keydown', handleKeyDown);
+        modal.addEventListener('click', handleOverlayClick);
+      }
+
+      function closeModal() {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.removeEventListener('keydown', handleKeyDown);
+        modal.removeEventListener('click', handleOverlayClick);
+        if (lastFocusedElement) {
+          lastFocusedElement.focus();
+        }
+      }
+
+      function handleKeyDown(event) {
+        if (event.key === 'Escape') {
+          closeModal();
+        }
+        if (event.key === 'Tab') {
+          const firstElement = focusableElements[0];
+          const lastElement = focusableElements[focusableElements.length - 1];
+
+          if (event.shiftKey && document.activeElement === firstElement) {
+            event.preventDefault();
+            lastElement.focus();
+          } else if (!event.shiftKey && document.activeElement === lastElement) {
+            event.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+
+      function handleOverlayClick(event) {
+        if (event.target === modal) {
+          closeModal();
+        }
+      }
+
+      function showError(inputId, message) {
+        const errorElement = document.getElementById(`${inputId}-error`);
+        errorElement.textContent = message;
+        document.getElementById(inputId).setAttribute('aria-invalid', 'true');
+      }
+
+      function clearErrors() {
+        ['name', 'email', 'message'].forEach((field) => {
+          const errorElement = document.getElementById(`${field}-error`);
+          errorElement.textContent = '';
+          document.getElementById(field).removeAttribute('aria-invalid');
+        });
+      }
+
+      function validateForm() {
+        clearErrors();
+        let isValid = true;
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        if (!name) {
+          showError('name', 'Please enter your name.');
+          isValid = false;
+        }
+
+        if (!email) {
+          showError('email', 'Please enter your email address.');
+          isValid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showError('email', 'Please enter a valid email address.');
+          isValid = false;
+        }
+
+        if (!message) {
+          showError('message', 'Please add a brief message.');
+          isValid = false;
+        }
+
+        return isValid;
+      }
+
+      openButton.addEventListener('click', openModal);
+      closeButton.addEventListener('click', closeModal);
+      cancelButton.addEventListener('click', closeModal);
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (validateForm()) {
+          closeModal();
+          form.reset();
+          alert('Thank you for subscribing to Turtle Ipsum news!');
+        }
+      });
+
+      modal.setAttribute('aria-hidden', 'true');
+    </script>
+  </body>
+</html>
