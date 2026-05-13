@@ -1,0 +1,2 @@
+Lesson 1 - Javascript Basics - Data Types: Post-Lecture Quiz
+result: 100%
